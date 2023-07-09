@@ -17,27 +17,42 @@ conn = psycopg2.connect(
 
 with conn.cursor() as cur:
 
-    copy_from = """
-    COPY employees 
-    FROM STDIN
-    WITH (
-        FORMAT CSV,
-        DELIMITER ',',
-        HEADER
-    );
-    """
 
-    with open(employees_data_csv_path, 'r') as f_csv:
-        # next(f_csv)
+    with open(employees_data_csv_path, 'r', encoding='utf8') as f_csv:
+        copy_from = """
+        COPY employees 
+        FROM STDIN
+        WITH (
+            FORMAT CSV,
+            DELIMITER ',',
+            HEADER
+        );
+        """
         cur.copy_expert(copy_from, f_csv)
         conn.commit()
 
-    with open(customers_data_csv_path) as f_csv:
-        next(f_csv)
-        cur.copy_from(f_csv, 'customers', sep=',')
+    with open(customers_data_csv_path, 'r', encoding='utf8') as f_csv:
+        copy_from = """
+        COPY customers 
+        FROM STDIN
+        WITH (
+            FORMAT CSV,
+            DELIMITER ',',
+            HEADER
+        );
+        """
+        cur.copy_expert(copy_from, f_csv)
         conn.commit()
 
-    with open(orders_data_csv_path) as f_csv:
-        next(f_csv)
-        cur.copy_from(f_csv, 'orders', sep=',')
+    with open(orders_data_csv_path, 'r', encoding='utf8') as f_csv:
+        copy_from = """
+        COPY orders 
+        FROM STDIN
+        WITH (
+            FORMAT CSV,
+            DELIMITER ',',
+            HEADER
+        );
+        """
+        cur.copy_expert(copy_from, f_csv)
         conn.commit()
